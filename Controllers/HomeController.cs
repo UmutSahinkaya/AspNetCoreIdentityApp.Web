@@ -50,6 +50,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel model,string? returnUrl=null)
         {
