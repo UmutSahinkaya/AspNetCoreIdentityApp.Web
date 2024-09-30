@@ -18,6 +18,10 @@ public static class StartupExtensions
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = true;
             options.Password.RequireDigit = false;
+
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+            options.Lockout.MaxFailedAccessAttempts = 3;
+
         }).AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddUserValidator<UserValidator>().AddPasswordValidator<PasswordValidator>().AddEntityFrameworkStores<AppDbContext>();
     }
 }
