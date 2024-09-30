@@ -4,7 +4,7 @@
         <li class="nav-item dropdown">
             <a href="#" role="button" data-bs-toggle="dropdown" class="nav-link dropdown-toggle">@User.Identity.Name</a>
             <ul class="dropdown-menu">
-                <li><a href="#" class="dropdown-item">Çıkış Yap</a></li>
+                <li><a class="dropdown-item" asp-controller="Members" asp-action="Logout" >Çıkış Yap</a></li>
             </ul>
         </li>
     </ul>
