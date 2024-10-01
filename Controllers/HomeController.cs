@@ -50,6 +50,25 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel request)
+        {
+            var hasUser= await _userManager.FindByEmailAsync(request.Email);
+            if(hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "Bu email adresine sahip kullanýcý bulunamamýþtýr.");
+                return View();
+            }
+            //örneklink
+            //https://localhost:7203?userId=112233&token=aasdfasfsbdf
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken });
+            //Emailservice
+
+            TempData["SucceedMessage"] = "Þifre yenileme linki eposta adresinize gönderilmiþtir";
+            return RedirectToAction(nameof(ForgetPassword));
+        }
+
 
         public async Task<IActionResult> SignIn()
         {
