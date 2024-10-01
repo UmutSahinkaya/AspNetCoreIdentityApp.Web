@@ -46,6 +46,11 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             return View();
         }
 
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> SignIn()
         {
             return View();
