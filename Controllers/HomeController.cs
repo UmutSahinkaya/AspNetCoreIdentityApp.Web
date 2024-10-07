@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Services;
+using NuGet.Protocol;
 
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
@@ -67,7 +68,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
             var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken },HttpContext.Request.Scheme);
             //Emailservice
-            await _emailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
+            await _emailService.SendResetPasswordEmail(passwordResetLink!, hasUser.Email!);
 
             TempData["SucceedMessage"] = "Þifre yenileme linki eposta adresinize gönderilmiþtir";
             return RedirectToAction(nameof(ForgetPassword));
@@ -82,19 +83,19 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel request)
         {
-            string userId = TempData["userId"].ToString();
-            string token = TempData["token"].ToString();
+            var userId = TempData["userId"];
+            var token = TempData["token"];
             if(userId == null || token==null)
                 throw new Exception("Bir hata meydana geldi.");
 
-            var hasUser = await _userManager.FindByIdAsync(userId);
+            var hasUser = await _userManager.FindByIdAsync(userId.ToString()!);
             if (hasUser == null)
             {
                 ModelState.AddModelError(string.Empty, "Kullanýcý bulunamamýþtýr.");
                 return View();
             }
 
-            var result= await _userManager.ResetPasswordAsync(hasUser,token,request.Password);
+            var result= await _userManager.ResetPasswordAsync(hasUser,token.ToString()!,request.Password);
             if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "Þifreniz baþarýyla yenilenmiþtir.";
